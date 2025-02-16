@@ -21,7 +21,6 @@
             text-align: center;
         }
 
-        /* 🖼️ Image container */
         .product-image-container {
             position: relative;
             width: 200px;
@@ -31,7 +30,6 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        /* 🖼️ Image stretched to fit */
         #product-image {
             width: 100%;
             height: 100%;
@@ -85,9 +83,13 @@
 
         #product-description {
             margin-top: 20px;
-            font-size: 20px;
+            font-size: 18px;
             color: #333;
-            padding: 0 10px;
+            padding: 0 20px;
+            text-align: justify;
+            line-height: 1.6;
+            max-width: 90%;
+            white-space: normal;
         }
 
         #share-button {
@@ -134,9 +136,13 @@
             return {
                 name: params.get("name"),
                 price: params.get("price"),
-                description: params.get("description") || "No description available.",
+                description: cleanDescription(params.get("description") || "No description available."),
                 images: params.get("images") ? params.get("images").split(",") : []
             };
+        }
+
+        function cleanDescription(text) {
+            return text.replace(/\s+/g, ' ').trim(); // Removes extra spaces and ensures a single space between sentences
         }
 
         function convertGoogleDriveLink(link) {
@@ -154,10 +160,10 @@
 
         window.onload = function () {
             const { name, price, description, images: imgArray } = getQueryParams();
-            images = imgArray.map(convertGoogleDriveLink); // Convert links
+            images = imgArray.map(convertGoogleDriveLink);
 
             document.getElementById("product-name").textContent = name;
-            document.getElementById("original-price").textContent = (price * 2).toFixed(2); // Restore original price
+            document.getElementById("original-price").textContent = (price * 2).toFixed(2);
             document.getElementById("discounted-price").textContent = price;
             document.getElementById("product-description").textContent = description;
 
