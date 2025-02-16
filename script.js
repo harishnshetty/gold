@@ -80,7 +80,7 @@ async function fetchData() {
             shareBtn.onclick = (event) => {
                 event.stopPropagation();
                 const currentPageLink = window.location.href; // Get current page URL
-                const message = `Check this out: ${name} \nOriginal Price: ₹${price} \nDiscounted Price: ₹${discountedPrice} \n${imageUrls[0]} \nView more: ${currentPageLink}`;
+               const message = `🔥 -50% OFF | 6 months warranty \n Check this out: ${name} \nOriginal Price: ₹${price} \nDiscounted Price:        ₹${discountedPrice} \n${imageUrls[0]} \n \nView more: ${currentPageLink}`;
                 const whatsappUrl = `http://wa.me/+917795383476?text=${encodeURIComponent(message)}`;
                 window.open(whatsappUrl, "_blank");
             };
