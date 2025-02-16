@@ -28,13 +28,14 @@
             overflow: hidden;
             border-radius: 12px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            touch-action: pan-y;
         }
 
         #product-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: opacity 0.5s ease-in-out;
+            transition: transform 0.3s ease-in-out, opacity 0.5s ease-in-out;
         }
 
         .dots {
@@ -128,7 +129,7 @@
 </head>
 <body>
     <div class="product-container">
-        <div class="product-image-container">
+        <div class="product-image-container" id="image-container">
             <img id="product-image" src="" alt="Product Image">
         </div>
 
@@ -182,7 +183,7 @@
         let manualSlideTimeout;
 
         function startAutoSlide() {
-            stopAutoSlide(); 
+            stopAutoSlide();
             autoSlideInterval = setInterval(() => {
                 nextSlide();
             }, 3000);
@@ -224,6 +225,8 @@
             document.getElementById("call-button").onclick = () => {
                 window.location.href = "tel:+917795383476";
             };
+
+            addSwipeGesture();
         };
 
         function createDots() {
@@ -251,16 +254,23 @@
         }
 
         function updateSlider() {
-            const imageElement = document.getElementById("product-image");
-            imageElement.style.opacity = "0";
-            setTimeout(() => {
-                imageElement.src = images[currentIndex];
-                imageElement.style.opacity = "1";
-            }, 300);
+            document.getElementById("product-image").src = images[currentIndex];
 
             const dots = document.querySelectorAll(".dot");
             dots.forEach(dot => dot.classList.remove("active"));
             dots[currentIndex].classList.add("active");
+        }
+
+        function addSwipeGesture() {
+            let startX = 0;
+            document.getElementById("image-container").addEventListener("touchstart", e => startX = e.touches[0].clientX);
+            document.getElementById("image-container").addEventListener("touchend", e => {
+                let endX = e.changedTouches[0].clientX;
+                if (startX - endX > 50) nextSlide();
+                else if (endX - startX > 50) currentIndex = (currentIndex - 1 + images.length) % images.length;
+                updateSlider();
+                resetAutoSlide();
+            });
         }
     </script>
 </body>
