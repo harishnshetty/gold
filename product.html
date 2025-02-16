@@ -92,19 +92,36 @@
             white-space: normal;
         }
 
-        #share-button {
+        .button-container {
+            display: flex;
+            gap: 10px;
             margin-top: 20px;
+        }
+
+        .action-button {
             padding: 10px 20px;
             font-size: 18px;
-            background-color: #25D366;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            width: 180px;
+        }
+
+        #share-button {
+            background-color: #25D366;
         }
 
         #share-button:hover {
             background-color: #1EBE5B;
+        }
+
+        #call-button {
+            background-color: #007BFF;
+        }
+
+        #call-button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -123,11 +140,14 @@
             <span class="discounted-price">₹<span id="discounted-price"></span></span>
         </div>
 
-        <p class="discount-info">🔥 Hot Deal -50% OFF</p>
+        <p class="discount-info">🔥 Hot Deal -50% OFF <br> 6 months warranty for polishing.</p>
 
         <p id="product-description"></p>
 
-        <button id="share-button">Share on WhatsApp</button>
+        <div class="button-container">
+            <button id="share-button" class="action-button">Share on WhatsApp</button>
+            <button id="call-button" class="action-button">Call Now</button>
+        </div>
     </div>
 
     <script>
@@ -142,7 +162,7 @@
         }
 
         function cleanDescription(text) {
-            return text.replace(/\s+/g, ' ').trim(); // Removes extra spaces and ensures a single space between sentences
+            return text.replace(/\s+/g, ' ').trim();
         }
 
         function convertGoogleDriveLink(link) {
@@ -173,9 +193,13 @@
             }
 
             document.getElementById("share-button").onclick = () => {
-                const message = `🔥 Hot Deal -50% OFF 🔥\n${name} \nOriginal Price: ₹${(price * 2).toFixed(2)} \nDiscounted Price: ₹${price} \n${images[0]}`;
+                const message = `🔥 Hot Deal -50% OFF \n6 months warranty for polishing.\n${name} \nOriginal Price: ₹${(price * 2).toFixed(2)} \nDiscounted Price: ₹${price} \n${images[0]}`;
                 const whatsappUrl = `http://wa.me/+917795383476?text=${encodeURIComponent(message)}`;
                 window.open(whatsappUrl, "_blank");
+            };
+
+            document.getElementById("call-button").onclick = () => {
+                window.location.href = "tel:+917795383476";
             };
         };
 
