@@ -28,14 +28,13 @@
             overflow: hidden;
             border-radius: 12px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            touch-action: pan-y;
+            cursor: pointer;
         }
 
         #product-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.3s ease-in-out, opacity 0.5s ease-in-out;
         }
 
         .dots {
@@ -94,24 +93,19 @@
             white-space: normal;
         }
 
-        .button-container {
-            display: flex;
-            gap: 10px;
+        #share-button, #call-button {
             margin-top: 20px;
-        }
-
-        .action-button {
             padding: 10px 20px;
             font-size: 18px;
+            background-color: #25D366;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            width: 180px;
-        }
-
-        #share-button {
-            background-color: #25D366;
+            display: block;
+            width: 200px;
+            text-align: center;
+            text-decoration: none;
         }
 
         #share-button:hover {
@@ -129,7 +123,7 @@
 </head>
 <body>
     <div class="product-container">
-        <div class="product-image-container" id="image-container">
+        <div class="product-image-container" onclick="openGallery()">
             <img id="product-image" src="" alt="Product Image">
         </div>
 
@@ -142,14 +136,12 @@
             <span class="discounted-price">₹<span id="discounted-price"></span></span>
         </div>
 
-        <p class="discount-info">🔥 Hot Deal -50% OFF <br> 6 months warranty for polishing.</p>
+        <p class="discount-info">🔥 Hot Deal -50% OFF | 6 months warranty for polishing.</p>
 
         <p id="product-description"></p>
 
-        <div class="button-container">
-            <button id="share-button" class="action-button">Share on WhatsApp</button>
-            <button id="call-button" class="action-button">Call Now</button>
-        </div>
+        <button id="share-button">Share on WhatsApp</button>
+        <a id="call-button" href="tel:+917795383476">Call Now</a>
     </div>
 
     <script>
@@ -179,27 +171,6 @@
 
         let currentIndex = 0;
         let images = [];
-        let autoSlideInterval;
-        let manualSlideTimeout;
-
-        function startAutoSlide() {
-            stopAutoSlide();
-            autoSlideInterval = setInterval(() => {
-                nextSlide();
-            }, 3000);
-        }
-
-        function stopAutoSlide() {
-            clearInterval(autoSlideInterval);
-        }
-
-        function resetAutoSlide() {
-            stopAutoSlide();
-            clearTimeout(manualSlideTimeout);
-            manualSlideTimeout = setTimeout(() => {
-                startAutoSlide();
-            }, 5000);
-        }
 
         window.onload = function () {
             const { name, price, description, images: imgArray } = getQueryParams();
@@ -213,20 +184,14 @@
             if (images.length > 0) {
                 document.getElementById("product-image").src = images[currentIndex];
                 createDots();
-                startAutoSlide();
+                enableSwipe();
             }
 
             document.getElementById("share-button").onclick = () => {
-                const message = `🔥 Hot Deal -50% OFF \n6 months warranty for polishing.\n${name} \nOriginal Price: ₹${(price * 2).toFixed(2)} \nDiscounted Price: ₹${price} \n${images[0]}`;
+                const message = `🔥 Hot Deal -50% OFF | 6 months warranty for polishing. 🔥\n${name} \nOriginal Price: ₹${(price * 2).toFixed(2)} \nDiscounted Price: ₹${price} \n${images[0]}`;
                 const whatsappUrl = `http://wa.me/+917795383476?text=${encodeURIComponent(message)}`;
                 window.open(whatsappUrl, "_blank");
             };
-
-            document.getElementById("call-button").onclick = () => {
-                window.location.href = "tel:+917795383476";
-            };
-
-            addSwipeGesture();
         };
 
         function createDots() {
@@ -245,12 +210,6 @@
         function goToSlide(index) {
             currentIndex = index;
             updateSlider();
-            resetAutoSlide();
-        }
-
-        function nextSlide() {
-            currentIndex = (currentIndex + 1) % images.length;
-            updateSlider();
         }
 
         function updateSlider() {
@@ -261,16 +220,32 @@
             dots[currentIndex].classList.add("active");
         }
 
-        function addSwipeGesture() {
+        function enableSwipe() {
+            const imageContainer = document.querySelector(".product-image-container");
             let startX = 0;
-            document.getElementById("image-container").addEventListener("touchstart", e => startX = e.touches[0].clientX);
-            document.getElementById("image-container").addEventListener("touchend", e => {
-                let endX = e.changedTouches[0].clientX;
-                if (startX - endX > 50) nextSlide();
-                else if (endX - startX > 50) currentIndex = (currentIndex - 1 + images.length) % images.length;
-                updateSlider();
-                resetAutoSlide();
+
+            imageContainer.addEventListener("touchstart", (e) => {
+                startX = e.touches[0].clientX;
             });
+
+            imageContainer.addEventListener("touchend", (e) => {
+                let endX = e.changedTouches[0].clientX;
+                if (startX - endX > 50) goToSlide((currentIndex + 1) % images.length);
+                else if (endX - startX > 50) goToSlide((currentIndex - 1 + images.length) % images.length);
+            });
+        }
+
+        function openGallery() {
+            let galleryWindow = window.open("", "_blank");
+            galleryWindow.document.write(`
+                <html>
+                <head>
+                    <title>Image Gallery</title>
+                    <style>body { text-align: center; background: black; } img { width: 100%; margin-top: 10px; }</style>
+                </head>
+                <body>${images.map(img => `<img src="${img}" alt="Product Image">`).join('')}</body>
+                </html>
+            `);
         }
     </script>
 </body>
