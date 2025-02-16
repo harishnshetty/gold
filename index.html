@@ -65,7 +65,10 @@
             border-radius: 5px;
             cursor: pointer;
         }
-
+        .banner button a {
+            text-decoration: none;
+            color: #a71e32;
+        }
         /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
@@ -91,7 +94,6 @@
             width: 30px;
             height: 30px;
         }
-
         /* Categories Panel */
         .categories-panel {
             display: none;
@@ -109,47 +111,52 @@
             float: right;
             font-size: 20px;
             cursor: pointer;
+            background-color: #7ed019; /* Lime color */
+            padding: 5px 10px;
+            border-radius: 50%;
         }
         .categories-panel div {
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: space-between;
             padding: 15px;
             font-size: 18px;
             border-radius: 8px;
             cursor: pointer;
             transition: 0.3s;
+            background-color: #fffbb7; /* Lime color background */
+            border: 1px solid #92cb4d;
+            margin-bottom: 10px;
         }
         .categories-panel div:hover {
-            background-color: #f9e4b7;
+            background-color: #f0f095;
         }
         .categories-panel img {
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
+        }
+        .arrow-icon {
+            color: red;
+            font-size: 20px;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <i class="fas fa-bars menu-icon"></i>
+        <i class="fas fa-bars menu-icon" id="menu-btn"></i>
         <div class="logo">Om Jewellery</div>
         <i class="fas fa-heart"></i>
     </div>
-
     <input type="text" class="search-bar" placeholder="Search for Diamond R">
-
     <div class="categories">
         <div>New Arrivals</div>
         <div>Wedding Collection</div>
     </div>
-
     <div class="banner">
         <h1>Buy / Rent the Jewels</h1>
         <h3>-50% OFF on all Products</h3>
-
-        <button>BUY NOW</button>
+        <button><a href="tel:+917795383476">CALL NOW TO BUY/RENT</a></button>
     </div>
-
     <div class="bottom-nav">
         <div onclick="redirectToPage('index.html')">
             <img src="images/home1.png" alt="Home Icon"> Home
@@ -161,40 +168,33 @@
             <img src="images/map.png" alt="Map Icon"> Google-Map
         </div>
     </div>
-
     <!-- Categories Panel -->
     <div class="categories-panel" id="categories-panel">
         <span class="close-btn">&times;</span>
         <h2>Categories</h2>
         <div onclick="redirectToPage('neck.html')">
-            <img src="images/neck.png" alt="Necklace Icon"> Necklace
+            <img src="images/neck.png" alt="Necklace Icon"> Necklace <i class="fas fa-chevron-right arrow-icon"></i>
         </div>
         <div onclick="redirectToPage('ear.html')">
-            <img src="images/ear.png" alt="Earrings Icon"> Earrings
+            <img src="images/ear.png" alt="Earrings Icon"> Earrings <i class="fas fa-chevron-right arrow-icon"></i>
         </div>
         <div onclick="redirectToPage('ring.html')">
-            <img src="images/ring.png" alt="Rings Icon"> Rings
+            <img src="images/ring.png" alt="Rings Icon"> Rings <i class="fas fa-chevron-right arrow-icon"></i>
         </div>
         <div onclick="redirectToPage('wed.html')">
-            <img src="images/wed.png" alt="Wedding Icon"> Wedding Collections
-        </div>
-        <div onclick="redirectToPage('wed.html')">
-            <img src="images/wed.png" alt="Wedding Icon"> Full-Set For Wedding
+            <img src="images/wed.png" alt="Wedding Icon"> Wedding Collections <i class="fas fa-chevron-right arrow-icon"></i>
         </div>
     </div>
-
     <script>
-        // Function to handle page redirection
         function redirectToPage(url) {
             window.location.href = url;
         }
-
-        // Open Categories Panel
+        document.getElementById('menu-btn').addEventListener('click', function() {
+            document.getElementById('categories-panel').style.display = 'block';
+        });
         document.getElementById('categories-btn').addEventListener('click', function() {
             document.getElementById('categories-panel').style.display = 'block';
         });
-
-        // Close Categories Panel
         document.querySelector('.close-btn').addEventListener('click', function() {
             document.getElementById('categories-panel').style.display = 'none';
         });
