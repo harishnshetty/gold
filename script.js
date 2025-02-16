@@ -17,30 +17,24 @@ async function fetchData() {
             const name = row[1]; // Jewelry Name
             const price = parseFloat(row[2]); // Original Price
             const discountedPrice = (price * 0.5).toFixed(2); // 50% Discounted Price
-            const discountPercent = 50; // Fixed at 50%
+            const discountPercent = 50;
             const fullDescription = row[4] || "Beautiful handcrafted jewelry."; // ✅ Full description
-            let shortDescription = fullDescription; 
-
-            // ✅ Truncate to 50 characters with "..." if longer
-            if (shortDescription.length > 60) {
-                shortDescription = shortDescription.substring(0, 60) + "...";
-            }
+            let shortDescription = fullDescription.length > 50 ? fullDescription.substring(0, 50) + "..." : fullDescription;
 
             const imageUrls = row[3].split(", ").map(link =>
                 link.replace("https://drive.google.com/open?id=", "https://lh3.googleusercontent.com/d/")
             );
 
-            // Create product item div
-            const productItem = document.createElement("div");
-            productItem.classList.add("product-item");
-
-            // ✅ Redirect function for full item click
             function redirectToProductPage() {
                 const queryString = `product.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(discountedPrice)}&description=${encodeURIComponent(fullDescription)}&images=${encodeURIComponent(imageUrls.join(","))}`;
                 window.location.href = queryString;
             }
 
-            // Image container with slideshow effect
+            const productItem = document.createElement("div");
+            productItem.classList.add("product-item");
+            productItem.style.cursor = "pointer";
+            productItem.onclick = redirectToProductPage;
+
             const imgContainer = document.createElement("div");
             imgContainer.classList.add("image-slider");
 
@@ -48,11 +42,9 @@ async function fetchData() {
             let currentIndex = 0;
             img.src = imageUrls[currentIndex];
             img.alt = name;
-            img.style.cursor = "pointer";
 
-            imgContainer.onclick = redirectToProductPage; // ✅ Click image redirects
+            imgContainer.onclick = redirectToProductPage;
 
-            // Auto-slide images every 2 seconds
             if (imageUrls.length > 1) {
                 setInterval(() => {
                     currentIndex = (currentIndex + 1) % imageUrls.length;
@@ -62,7 +54,6 @@ async function fetchData() {
 
             imgContainer.appendChild(img);
 
-            // Product details section
             const productDetails = document.createElement("div");
             productDetails.classList.add("product-details");
 
@@ -78,23 +69,21 @@ async function fetchData() {
 
             const detailsPara = document.createElement("p");
             detailsPara.classList.add("product-details-text");
-            detailsPara.innerText = shortDescription; // ✅ Limited to 50 characters
+            detailsPara.innerText = shortDescription;
 
             const hotDeal = document.createElement("p");
             hotDeal.classList.add("hot-deal");
             hotDeal.textContent = "Hot Deal";
 
-            // WhatsApp share button
             const shareBtn = document.createElement("button");
             shareBtn.textContent = "Share";
             shareBtn.onclick = (event) => {
-                event.stopPropagation(); // Prevent redirection when clicking share button
+                event.stopPropagation();
                 const message = `Check this out: ${name} \nOriginal Price: ₹${price} \nDiscounted Price: ₹${discountedPrice} \n${imageUrls[0]}`;
-                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+                const whatsappUrl = `http://wa.me/+917795383476?text=${encodeURIComponent(message)}`;
                 window.open(whatsappUrl, "_blank");
             };
 
-            // Append elements
             priceSection.appendChild(priceInfo);
             productDetails.appendChild(title);
             productDetails.appendChild(priceSection);
@@ -105,15 +94,10 @@ async function fetchData() {
             productItem.appendChild(imgContainer);
             productItem.appendChild(productDetails);
             productList.appendChild(productItem);
-
-            // ✅ Clicking anywhere on the item redirects
-            productItem.style.cursor = "pointer";
-            productItem.onclick = redirectToProductPage;
         });
     } catch (error) {
         console.error("Error fetching data:", error);
     }
 }
 
-// Call function to load data
 fetchData();
