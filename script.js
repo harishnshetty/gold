@@ -73,7 +73,7 @@ async function fetchData() {
 
             const hotDeal = document.createElement("p");
             hotDeal.classList.add("hot-deal");
-            hotDeal.textContent = "Hot Deal";
+            hotDeal.textContent = "🔥Hot Deal";
 
             const shareBtn = document.createElement("button");
             shareBtn.textContent = "Share";
