@@ -136,7 +136,7 @@
             <span class="discounted-price">₹<span id="discounted-price"></span></span>
         </div>
 
-        <p class="discount-info">🔥 Hot Deal -50% OFF <br> 6 months warranty </br> </p>
+        <p class="discount-info">🔥 Hot Deal -50% OFF <br> 6 months warranty </br></p>
 
         <p id="product-description"></p>
 
@@ -188,7 +188,7 @@
             }
 
             document.getElementById("share-button").onclick = () => {
-                const message = `🔥 -50% OFF | 6 months warranty \n${name} \nOriginal Price: ₹${(price * 2).toFixed(2)} \nDiscounted Price:       ₹${price} \n${images[0]}\n \n View more: ${currentPageLink}`;
+                const message = `🔥 Hot Deal -50% OFF | 6 months warranty for polishing. 🔥\n${name} \nOriginal Price: ₹${(price * 2).toFixed(2)} \nDiscounted Price: ₹${price} \n${images[0]}`;
                 const whatsappUrl = `http://wa.me/+917795383476?text=${encodeURIComponent(message)}`;
                 window.open(whatsappUrl, "_blank");
             };
