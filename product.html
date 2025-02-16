@@ -34,6 +34,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: opacity 0.5s ease-in-out;
         }
 
         .dots {
@@ -177,6 +178,27 @@
 
         let currentIndex = 0;
         let images = [];
+        let autoSlideInterval;
+        let manualSlideTimeout;
+
+        function startAutoSlide() {
+            stopAutoSlide(); 
+            autoSlideInterval = setInterval(() => {
+                nextSlide();
+            }, 3000);
+        }
+
+        function stopAutoSlide() {
+            clearInterval(autoSlideInterval);
+        }
+
+        function resetAutoSlide() {
+            stopAutoSlide();
+            clearTimeout(manualSlideTimeout);
+            manualSlideTimeout = setTimeout(() => {
+                startAutoSlide();
+            }, 5000);
+        }
 
         window.onload = function () {
             const { name, price, description, images: imgArray } = getQueryParams();
@@ -190,6 +212,7 @@
             if (images.length > 0) {
                 document.getElementById("product-image").src = images[currentIndex];
                 createDots();
+                startAutoSlide();
             }
 
             document.getElementById("share-button").onclick = () => {
@@ -219,10 +242,21 @@
         function goToSlide(index) {
             currentIndex = index;
             updateSlider();
+            resetAutoSlide();
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % images.length;
+            updateSlider();
         }
 
         function updateSlider() {
-            document.getElementById("product-image").src = images[currentIndex];
+            const imageElement = document.getElementById("product-image");
+            imageElement.style.opacity = "0";
+            setTimeout(() => {
+                imageElement.src = images[currentIndex];
+                imageElement.style.opacity = "1";
+            }, 300);
 
             const dots = document.querySelectorAll(".dot");
             dots.forEach(dot => dot.classList.remove("active"));
