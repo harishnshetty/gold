@@ -10,30 +10,43 @@
             text-align: center;
             padding: 20px;
         }
-        .slider-container {
-            position: relative;
+
+        .product-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            max-width: 400px;
+            padding: 20px;
+            max-width: 800px;
             margin: auto;
+            text-align: center;
+        }
+
+        /* 🖼️ Image container */
+        .product-image-container {
+            position: relative;
+            width: 200px;
+            height: 250px;
             overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        .slider-container img {
+
+        /* 🖼️ Image stretched to fit */
+        #product-image {
             width: 100%;
-            height: auto;
-            border-radius: 8px;
-            border: 2px solid black;
-            transition: transform 0.3s ease-in-out;
+            height: 100%;
+            object-fit: cover;
         }
+
         .dots {
-            margin-top: 10px;
             display: flex;
             justify-content: center;
+            margin-top: 10px;
         }
+
         .dot {
-            height: 10px;
-            width: 10px;
+            height: 12px;
+            width: 12px;
             margin: 0 5px;
             background-color: gray;
             border-radius: 50%;
@@ -41,46 +54,79 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
+
         .active {
             background-color: black;
         }
-        .details {
-            margin-top: 15px;
+
+        .price-section {
+            margin-top: 20px;
+            font-size: 24px;
         }
-        h2, p {
-            margin: 5px 0;
+
+        .original-price {
+            text-decoration: line-through;
+            color: #999;
+            margin-right: 10px;
         }
-        .share-btn {
+
+        .discounted-price {
+            font-weight: bold;
+            font-size: 28px;
+            color: #E63946;
+        }
+
+        .discount-info {
+            font-size: 22px;
+            font-weight: bold;
+            color: green;
             margin-top: 10px;
-            padding: 10px 15px;
-            background-color: green;
+        }
+
+        #product-description {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #333;
+            padding: 0 10px;
+        }
+
+        #share-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #25D366;
             color: white;
             border: none;
-            cursor: pointer;
-            font-size: 16px;
             border-radius: 5px;
+            cursor: pointer;
         }
-        .share-btn:hover {
-            background-color: darkgreen;
+
+        #share-button:hover {
+            background-color: #1EBE5B;
         }
     </style>
 </head>
 <body>
-    <h2 id="product-name">Product Name</h2>
-    
-    <div class="slider-container" id="slider-container">
-        <img id="product-image" src="" alt="Product Image">
+    <div class="product-container">
+        <div class="product-image-container">
+            <img id="product-image" src="" alt="Product Image">
+        </div>
+
+        <div class="dots" id="dots-container"></div>
+
+        <h2 id="product-name"></h2>
+
+        <div class="price-section">
+            <span class="original-price">₹<span id="original-price"></span></span>
+            <span class="discounted-price">₹<span id="discounted-price"></span></span>
+        </div>
+
+        <p class="discount-info">🔥 Hot Deal -50% OFF</p>
+
+        <p id="product-description"></p>
+
+        <button id="share-button">Share on WhatsApp</button>
     </div>
-
-    <div class="dots" id="dots-container"></div>
-
-    <div class="details">
-        <p><strong>Original Price:</strong> <del>₹<span id="original-price"></span></del></p>
-        <p><strong>Discounted Price:</strong> ₹<span id="discounted-price"></span></p>
-        <p><strong>Description:</strong> <span id="product-description"></span></p>
-    </div>
-
-    <button class="share-btn" id="share-button">Share on WhatsApp</button>
 
     <script>
         function getQueryParams() {
@@ -92,51 +138,45 @@
                 images: params.get("images") ? params.get("images").split(",") : []
             };
         }
-    
+
+        function convertGoogleDriveLink(link) {
+            if (link.includes("drive.google.com")) {
+                const match = link.match(/[-\w]{25,}/);
+                if (match) {
+                    return `https://drive.google.com/uc?export=view&id=${match[0]}`;
+                }
+            }
+            return link;
+        }
+
         let currentIndex = 0;
         let images = [];
-    
+
         window.onload = function () {
             const { name, price, description, images: imgArray } = getQueryParams();
-            images = imgArray;
-    
+            images = imgArray.map(convertGoogleDriveLink); // Convert links
+
             document.getElementById("product-name").textContent = name;
-            document.getElementById("original-price").textContent = (price * 2).toFixed(2);
+            document.getElementById("original-price").textContent = (price * 2).toFixed(2); // Restore original price
             document.getElementById("discounted-price").textContent = price;
             document.getElementById("product-description").textContent = description;
-    
+
             if (images.length > 0) {
                 document.getElementById("product-image").src = images[currentIndex];
                 createDots();
             }
-    
+
             document.getElementById("share-button").onclick = () => {
-                const message = `Check this out: ${name} \nOriginal Price: ₹${(price * 2).toFixed(2)} \nDiscounted Price: ₹${price} \n${images[0]}`;
+                const message = `🔥 Hot Deal -50% OFF 🔥\n${name} \nOriginal Price: ₹${(price * 2).toFixed(2)} \nDiscounted Price: ₹${price} \n${images[0]}`;
                 const whatsappUrl = `http://wa.me/+917795383476?text=${encodeURIComponent(message)}`;
                 window.open(whatsappUrl, "_blank");
             };
-    
-            const sliderContainer = document.getElementById("slider-container");
-            let startX = 0;
-    
-            sliderContainer.addEventListener("touchstart", (event) => {
-                startX = event.touches[0].clientX;
-            });
-    
-            sliderContainer.addEventListener("touchend", (event) => {
-                let endX = event.changedTouches[0].clientX;
-                if (startX > endX + 50) {
-                    changeSlide(1);
-                } else if (startX < endX - 50) {
-                    changeSlide(-1);
-                }
-            });
         };
-    
+
         function createDots() {
             const dotsContainer = document.getElementById("dots-container");
             dotsContainer.innerHTML = "";
-    
+
             images.forEach((_, index) => {
                 const dot = document.createElement("span");
                 dot.classList.add("dot");
@@ -145,25 +185,19 @@
                 dotsContainer.appendChild(dot);
             });
         }
-    
-        function changeSlide(direction) {
-            currentIndex = (currentIndex + direction + images.length) % images.length;
-            updateSlider();
-        }
-    
+
         function goToSlide(index) {
             currentIndex = index;
             updateSlider();
         }
-    
+
         function updateSlider() {
             document.getElementById("product-image").src = images[currentIndex];
-    
+
             const dots = document.querySelectorAll(".dot");
             dots.forEach(dot => dot.classList.remove("active"));
             dots[currentIndex].classList.add("active");
         }
     </script>
-    
 </body>
 </html>
