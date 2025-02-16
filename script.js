@@ -57,7 +57,7 @@ async function fetchData() {
             title.textContent = name;
 
             const priceInfo = document.createElement("p");
-            priceInfo.innerHTML = `<del>₹${price}</del> <strong>₹${discountedPrice}</strong>`;
+            priceInfo.innerHTML = `<del>₹${price}</del> <strong>₹${discountedPrice}</strong> <span class="discount-label">(-50%)</span>`;
 
             // WhatsApp share button
             const shareBtn = document.createElement("button");
