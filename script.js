@@ -18,7 +18,14 @@ async function fetchData() {
             const price = parseFloat(row[2]); // Original Price
             const discountedPrice = (price * 0.5).toFixed(2); // 50% Discounted Price
             const discountPercent = 50; // Fixed at 50%
-            const description = row[4] || "Beautiful handcrafted jewelry."; // ✅ No truncation
+            const fullDescription = row[4] || "Beautiful handcrafted jewelry."; // ✅ Full description
+            let shortDescription = fullDescription; 
+
+            // ✅ Truncate to 50 characters with "..." if longer
+            if (shortDescription.length > 60) {
+                shortDescription = shortDescription.substring(0, 60) + "...";
+            }
+
             const imageUrls = row[3].split(", ").map(link =>
                 link.replace("https://drive.google.com/open?id=", "https://lh3.googleusercontent.com/d/")
             );
@@ -29,7 +36,7 @@ async function fetchData() {
 
             // ✅ Redirect function for full item click
             function redirectToProductPage() {
-                const queryString = `product.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(discountedPrice)}&description=${encodeURIComponent(description)}&images=${encodeURIComponent(imageUrls.join(","))}`;
+                const queryString = `product.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(discountedPrice)}&description=${encodeURIComponent(fullDescription)}&images=${encodeURIComponent(imageUrls.join(","))}`;
                 window.location.href = queryString;
             }
 
@@ -71,7 +78,7 @@ async function fetchData() {
 
             const detailsPara = document.createElement("p");
             detailsPara.classList.add("product-details-text");
-            detailsPara.innerText = description; // ✅ No truncation
+            detailsPara.innerText = shortDescription; // ✅ Limited to 50 characters
 
             const hotDeal = document.createElement("p");
             hotDeal.classList.add("hot-deal");
