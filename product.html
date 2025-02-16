@@ -50,6 +50,19 @@
         h2, p {
             margin: 5px 0;
         }
+        .share-btn {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        .share-btn:hover {
+            background-color: darkgreen;
+        }
     </style>
 </head>
 <body>
@@ -67,6 +80,8 @@
         <p><strong>Description:</strong> <span id="product-description"></span></p>
     </div>
 
+    <button class="share-btn" id="share-button">Share on WhatsApp</button>
+
     <script>
         function getQueryParams() {
             const params = new URLSearchParams(window.location.search);
@@ -83,17 +98,23 @@
 
         window.onload = function () {
             const { name, price, description, images: imgArray } = getQueryParams();
-            images = imgArray; 
+            images = imgArray;
 
             document.getElementById("product-name").textContent = name;
-            document.getElementById("original-price").textContent = price;
-            document.getElementById("discounted-price").textContent = (price * 0.5).toFixed(2); // 50% Discount
+            document.getElementById("original-price").textContent = (price * 2).toFixed(2); // Restore original price
+            document.getElementById("discounted-price").textContent = price;
             document.getElementById("product-description").textContent = description;
-            
+
             if (images.length > 0) {
                 document.getElementById("product-image").src = images[currentIndex];
                 createDots();
             }
+
+            document.getElementById("share-button").onclick = () => {
+                const message = `Check this out: ${name} \nOriginal Price: ₹${(price * 2).toFixed(2)} \nDiscounted Price: ₹${price} \n${images[0]}`;
+                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, "_blank");
+            };
 
             // Swipe functionality
             const sliderContainer = document.getElementById("slider-container");

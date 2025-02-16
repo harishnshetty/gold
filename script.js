@@ -7,7 +7,7 @@ async function fetchData() {
     try {
         const response = await fetch(url);
         const data = await response.json();
-        const rows = data.values.slice(1);
+        const rows = data.values.slice(1).reverse(); // Reverse to show latest first
         console.log("Fetched Data:", rows);
 
         const productList = document.getElementById("product-list");
@@ -17,7 +17,8 @@ async function fetchData() {
             const name = row[1]; // Jewelry Name
             const price = parseFloat(row[2]); // Original Price
             const discountedPrice = (price * 0.5).toFixed(2); // 50% Discounted Price
-            const description = row[4] || "Beautiful handcrafted jewelry."; // Description (Modify column if needed)
+            const discountPercent = 50; // Fixed at 50%
+            const description = row[4] || "Beautiful handcrafted jewelry."; // ✅ No truncation
             const imageUrls = row[3].split(", ").map(link =>
                 link.replace("https://drive.google.com/open?id=", "https://lh3.googleusercontent.com/d/")
             );
@@ -25,6 +26,12 @@ async function fetchData() {
             // Create product item div
             const productItem = document.createElement("div");
             productItem.classList.add("product-item");
+
+            // ✅ Redirect function for full item click
+            function redirectToProductPage() {
+                const queryString = `product.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(discountedPrice)}&description=${encodeURIComponent(description)}&images=${encodeURIComponent(imageUrls.join(","))}`;
+                window.location.href = queryString;
+            }
 
             // Image container with slideshow effect
             const imgContainer = document.createElement("div");
@@ -34,15 +41,11 @@ async function fetchData() {
             let currentIndex = 0;
             img.src = imageUrls[currentIndex];
             img.alt = name;
-            img.style.cursor = "pointer"; // Show pointer on hover
+            img.style.cursor = "pointer";
 
-            // Redirect to product.html on click with images, price, and description
-            img.onclick = () => {
-                const queryString = `product.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(discountedPrice)}&description=${encodeURIComponent(description)}&images=${encodeURIComponent(imageUrls.join(","))}`;
-                window.location.href = queryString;
-            };
+            imgContainer.onclick = redirectToProductPage; // ✅ Click image redirects
 
-            // Auto slide images every 2 seconds
+            // Auto-slide images every 2 seconds
             if (imageUrls.length > 1) {
                 setInterval(() => {
                     currentIndex = (currentIndex + 1) % imageUrls.length;
@@ -52,28 +55,53 @@ async function fetchData() {
 
             imgContainer.appendChild(img);
 
-            // Add product details
+            // Product details section
+            const productDetails = document.createElement("div");
+            productDetails.classList.add("product-details");
+
             const title = document.createElement("h3");
             title.textContent = name;
 
+            const priceSection = document.createElement("div");
+            priceSection.classList.add("price-section");
+
             const priceInfo = document.createElement("p");
-            priceInfo.innerHTML = `<del>₹${price}</del> <strong>₹${discountedPrice}</strong> <span class="discount-label">(-50%)</span>`;
+            priceInfo.classList.add("price-info");
+            priceInfo.innerHTML = `<span class="discount-text">↓${discountPercent}%</span> <del>₹${price}</del> <strong>₹${discountedPrice}</strong>`;
+
+            const detailsPara = document.createElement("p");
+            detailsPara.classList.add("product-details-text");
+            detailsPara.innerText = description; // ✅ No truncation
+
+            const hotDeal = document.createElement("p");
+            hotDeal.classList.add("hot-deal");
+            hotDeal.textContent = "Hot Deal";
 
             // WhatsApp share button
             const shareBtn = document.createElement("button");
             shareBtn.textContent = "Share";
-            shareBtn.onclick = () => {
-                const message = `Check this out: ${name} \nOriginal Price: ₹${price} \nDiscounted Price: ₹${discountedPrice} \n${imageUrls.join("\n")}`;
-                const whatsappUrl = `https://wa.me/+917795383476?text=${encodeURIComponent(message)}`;
+            shareBtn.onclick = (event) => {
+                event.stopPropagation(); // Prevent redirection when clicking share button
+                const message = `Check this out: ${name} \nOriginal Price: ₹${price} \nDiscounted Price: ₹${discountedPrice} \n${imageUrls[0]}`;
+                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
                 window.open(whatsappUrl, "_blank");
             };
 
             // Append elements
+            priceSection.appendChild(priceInfo);
+            productDetails.appendChild(title);
+            productDetails.appendChild(priceSection);
+            productDetails.appendChild(detailsPara);
+            productDetails.appendChild(hotDeal);
+            productDetails.appendChild(shareBtn);
+
             productItem.appendChild(imgContainer);
-            productItem.appendChild(title);
-            productItem.appendChild(priceInfo);
-            productItem.appendChild(shareBtn);
+            productItem.appendChild(productDetails);
             productList.appendChild(productItem);
+
+            // ✅ Clicking anywhere on the item redirects
+            productItem.style.cursor = "pointer";
+            productItem.onclick = redirectToProductPage;
         });
     } catch (error) {
         console.error("Error fetching data:", error);
