@@ -1,3 +1,31 @@
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.header-gif {
+    width: 50px;  /* Adjust size as needed */
+    height: auto;
+}
+
+.home-button {
+    background: #a71e32; /* Red color */
+    color: white;
+    padding: 8px 12px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.home-button:hover {
+    background: #6e1323; /* Darker red */
+}
+
 /* Grid container */
 #product-list {
     display: grid;
