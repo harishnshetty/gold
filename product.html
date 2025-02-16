@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .slider-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 400px;
+            margin: auto;
+            overflow: hidden;
+        }
+        .slider-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 2px solid black;
+            transition: transform 0.3s ease-in-out;
+        }
+        .dots {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+        }
+        .dot {
+            height: 10px;
+            width: 10px;
+            margin: 0 5px;
+            background-color: gray;
+            border-radius: 50%;
+            display: inline-block;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .active {
+            background-color: black;
+        }
+        .details {
+            margin-top: 15px;
+        }
+        h2, p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h2 id="product-name">Product Name</h2>
+    
+    <div class="slider-container" id="slider-container">
+        <img id="product-image" src="" alt="Product Image">
+    </div>
+
+    <div class="dots" id="dots-container"></div>
+
+    <div class="details">
+        <p><strong>Original Price:</strong> <del>₹<span id="original-price"></span></del></p>
+        <p><strong>Discounted Price:</strong> ₹<span id="discounted-price"></span></p>
+        <p><strong>Description:</strong> <span id="product-description"></span></p>
+    </div>
+
+    <script>
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                name: params.get("name"),
+                price: params.get("price"),
+                description: params.get("description") || "No description available.",
+                images: params.get("images") ? params.get("images").split(",") : []
+            };
+        }
+
+        let currentIndex = 0;
+        let images = [];
+
+        window.onload = function () {
+            const { name, price, description, images: imgArray } = getQueryParams();
+            images = imgArray; 
+
+            document.getElementById("product-name").textContent = name;
+            document.getElementById("original-price").textContent = price;
+            document.getElementById("discounted-price").textContent = (price * 0.5).toFixed(2); // 50% Discount
+            document.getElementById("product-description").textContent = description;
+            
+            if (images.length > 0) {
+                document.getElementById("product-image").src = images[currentIndex];
+                createDots();
+            }
+
+            // Swipe functionality
+            const sliderContainer = document.getElementById("slider-container");
+            let startX = 0;
+
+            sliderContainer.addEventListener("touchstart", (event) => {
+                startX = event.touches[0].clientX;
+            });
+
+            sliderContainer.addEventListener("touchend", (event) => {
+                let endX = event.changedTouches[0].clientX;
+                if (startX > endX + 50) {
+                    changeSlide(1); // Swipe Left
+                } else if (startX < endX - 50) {
+                    changeSlide(-1); // Swipe Right
+                }
+            });
+        };
+
+        function createDots() {
+            const dotsContainer = document.getElementById("dots-container");
+            dotsContainer.innerHTML = "";
+
+            images.forEach((_, index) => {
+                const dot = document.createElement("span");
+                dot.classList.add("dot");
+                if (index === 0) dot.classList.add("active");
+                dot.onclick = () => goToSlide(index);
+                dotsContainer.appendChild(dot);
+            });
+        }
+
+        function changeSlide(direction) {
+            currentIndex = (currentIndex + direction + images.length) % images.length;
+            updateSlider();
+        }
+
+        function goToSlide(index) {
+            currentIndex = index;
+            updateSlider();
+        }
+
+        function updateSlider() {
+            document.getElementById("product-image").src = images[currentIndex];
+
+            const dots = document.querySelectorAll(".dot");
+            dots.forEach(dot => dot.classList.remove("active"));
+            dots[currentIndex].classList.add("active");
+        }
+    </script>
+</body>
+</html>
