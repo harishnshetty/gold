@@ -69,6 +69,21 @@
             text-decoration: none;
             color: #a71e32;
         }
+        /* Image Slider */
+        .image-slider {
+            width: 100%;
+            height: auto;
+            overflow: hidden;
+            position: relative;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .image-slider img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            transition: opacity 0.5s ease-in-out;
+        }
         /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
@@ -106,14 +121,12 @@
             padding: 20px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             overflow-y: auto;
-            
-            
         }
         .categories-panel .close-btn {
             float: right;
             font-size: 20px;
             cursor: pointer;
-            background-color: #7ed019; /* Lime color */
+            background-color: #7ed019;
             padding: 5px 10px;
             border-radius: 50%;
         }
@@ -126,12 +139,11 @@
             border-radius: 8px;
             cursor: pointer;
             transition: 0.3s;
-            background: linear-gradient(45deg, #57b051, #649cd1); /* Updated gradient */
+            background: linear-gradient(45deg, #57b051, #649cd1);
             border: 1px solid #92cb4d;
             margin-bottom: 10px;
-            color: white; /* Adjust text color for better visibility */
+            color: white;
         }
-        
         .categories-panel div:hover {
             background-color: #f0f095;
         }
@@ -148,12 +160,13 @@
 <body>
     <div class="header">
         <i class="fas fa-bars menu-icon" id="menu-btn"></i>
-        <div class="logo">OM Jewellers </div>
-       
+        <div class="logo">OM Jewellers</div>
         <i class="fas fa-heart"></i>
     </div>
-   <center> <h4>(one gram gold Coverage) Artificial Jewellery</h4>
-       <h3> 7795 3834 76</h3></center>
+    <center>
+        <h4>(One Gram Gold Coverage) Artificial Jewellery</h4>
+        <h3>7795 3834 76</h3>
+    </center>
     <div class="categories">
         <div>New Arrivals</div>
         <div>Wedding Collection</div>
@@ -161,8 +174,16 @@
     <div class="banner">
         <h1>Buy / Rent the Jewels</h1>
         <h3>-50% OFF on all Products</h3>
-        <button><a href="tel:+917795383476">CALL NOW </a></button>
+        <button><a href="tel:+917795383476">CALL NOW</a></button>
     </div>
+
+    <!-- Image Slider -->
+    <div class="image-slider">
+        <a href="all.html">
+            <img id="slider-img" src="images/1.jpg" alt="Jewellery Image">
+        </a>
+    </div>
+
     <div class="bottom-nav">
         <div onclick="redirectToPage('index.html')">
             <img src="images/home1.png" alt="Home Icon"> Home
@@ -174,36 +195,52 @@
             <img src="images/map.png" alt="Map Icon"> Google-Map
         </div>
     </div>
+
     <!-- Categories Panel -->
     <div class="categories-panel" id="categories-panel">
         <span class="close-btn">&times;</span>
         <h2>Categories</h2>
         <div onclick="redirectToPage('neck.html')">
-            <img src="images/neck.png" alt="Necklace Icon"> Necklace <i class="fas fa-chevron-right arrow-icon"></i>
+            <img src="images/neck.png" alt="Necklace Icon"> Necklace <i class="fas fa-chevron-right"></i>
         </div>
         <div onclick="redirectToPage('ear.html')">
-            <img src="images/ear.png" alt="Earrings Icon"> Earrings <i class="fas fa-chevron-right arrow-icon"></i>
+            <img src="images/ear.png" alt="Earrings Icon"> Earrings <i class="fas fa-chevron-right"></i>
         </div>
         <div onclick="redirectToPage('ring.html')">
-            <img src="images/ring.png" alt="Rings Icon"> Rings <i class="fas fa-chevron-right arrow-icon"></i>
+            <img src="images/ring.png" alt="Rings Icon"> Rings <i class="fas fa-chevron-right"></i>
         </div>
         <div onclick="redirectToPage('wed.html')">
-            <img src="images/wed.png" alt="Wedding Icon"> Wedding Collections <i class="fas fa-chevron-right arrow-icon"></i>
+            <img src="images/wed.png" alt="Wedding Icon"> Wedding Collections <i class="fas fa-chevron-right"></i>
         </div>
     </div>
+    
+
     <script>
         function redirectToPage(url) {
             window.location.href = url;
         }
+
         document.getElementById('menu-btn').addEventListener('click', function() {
             document.getElementById('categories-panel').style.display = 'block';
         });
+
         document.getElementById('categories-btn').addEventListener('click', function() {
             document.getElementById('categories-panel').style.display = 'block';
         });
+
         document.querySelector('.close-btn').addEventListener('click', function() {
             document.getElementById('categories-panel').style.display = 'none';
         });
+
+        const images = ["images/1.jpg", "images/2.jpg", "images/3.jpg"];
+        let index = 0;
+
+        function changeImage() {
+            index = (index + 1) % images.length;
+            document.getElementById("slider-img").src = images[index];
+        }
+
+        setInterval(changeImage, 2000);
     </script>
 </body>
 </html>
