@@ -17,6 +17,8 @@
         <div class="grid-container" id="product-list"></div>
     </main>
 
+
+
     <script>
         const sheetId = "1_pKpJnNG66rHfO3KnffE85tX-0iHuhN4-pKgn6UT8tw";
         const apiKey = "AIzaSyBwnJTt3tZV61gebywzYb8MIDk4CTcleHQ";
@@ -27,29 +29,29 @@
             try {
                 const response = await fetch(url);
                 const data = await response.json();
-                const rows = data.values.slice(1).reverse(); // Reverse to show latest first
+                let rows = data.values.slice(1).reverse(); // Reverse to show latest first
                 console.log("Fetched Data:", rows);
+    
+                // ✅ Filter to show only "Necklace"
+                rows = rows.filter(row => row[1]?.toLowerCase() === "necklace");
     
                 const productList = document.getElementById("product-list");
                 productList.innerHTML = ""; // Clear previous content
     
-                // ✅ Improved category filter: Matches "Necklace" even if written incorrectly
-                const filteredRows = rows.filter(row => row[1]?.toLowerCase().includes("necklace"));
+                const totalProducts = rows.length; // ✅ Get total number of products
     
-                filteredRows.forEach(row => {
+                rows.forEach((row, index) => {
+                    const serialNumber = totalProducts - index; // ✅ Reverse serial number
                     const name = row[1]; // Jewelry Name
                     const price = parseFloat(row[2]); // Original Price
                     const discountedPrice = (price * 0.5).toFixed(2); // 50% Discounted Price
                     const discountPercent = 50;
-                    const fullDescription = row[4] || "Beautiful handcrafted jewelry.";
+                    const fullDescription = row[4] || "Beautiful handcrafted jewelry."; // ✅ Full description
                     let shortDescription = fullDescription.length > 50 ? fullDescription.substring(0, 50) + "..." : fullDescription;
     
-                    // ✅ Convert all Google Drive image links correctly
-                    const imageUrls = row[3]
-                        ? row[3].split(/,\s*/).map(link =>
-                            link.replace("https://drive.google.com/open?id=", "https://lh3.googleusercontent.com/d/")
-                        )
-                        : [];
+                    const imageUrls = row[3].split(", ").map(link =>
+                        link.replace("https://drive.google.com/open?id=", "https://lh3.googleusercontent.com/d/")
+                    );
     
                     function redirectToProductPage() {
                         const queryString = `product.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(discountedPrice)}&description=${encodeURIComponent(fullDescription)}&images=${encodeURIComponent(imageUrls.join(","))}`;
@@ -66,20 +68,11 @@
     
                     const img = document.createElement("img");
                     let currentIndex = 0;
-    
-                    if (imageUrls.length > 0) {
-                        img.src = imageUrls[currentIndex];
-                        img.alt = name;
-                        imgContainer.appendChild(img);
-                    } else {
-                        img.src = "images/placeholder.jpg"; // ✅ Default image if no image available
-                        img.alt = "No Image Available";
-                        imgContainer.appendChild(img);
-                    }
+                    img.src = imageUrls[currentIndex];
+                    img.alt = name;
     
                     imgContainer.onclick = redirectToProductPage;
     
-                    // ✅ Proper image slider implementation
                     if (imageUrls.length > 1) {
                         setInterval(() => {
                             currentIndex = (currentIndex + 1) % imageUrls.length;
@@ -87,11 +80,13 @@
                         }, 2000);
                     }
     
+                    imgContainer.appendChild(img);
+    
                     const productDetails = document.createElement("div");
                     productDetails.classList.add("product-details");
     
                     const title = document.createElement("h3");
-                    title.textContent = name;
+                    title.textContent = `${serialNumber}. ${name}`; // ✅ Reverse serial number before name
     
                     const priceSection = document.createElement("div");
                     priceSection.classList.add("price-section");
@@ -112,7 +107,7 @@
                     shareBtn.textContent = "Share";
                     shareBtn.onclick = (event) => {
                         event.stopPropagation();
-                        const currentPageLink = window.location.href;
+                        const currentPageLink = window.location.href; // Get current page URL
                         const message = `🔥 -50% OFF | 6 months warranty \n Check this out: ${name} \nOriginal Price: ₹${price} \nDiscounted Price: ₹${discountedPrice} \n${imageUrls[0]} \n \nView more: ${currentPageLink}`;
                         const whatsappUrl = `http://wa.me/+917795383476?text=${encodeURIComponent(message)}`;
                         window.open(whatsappUrl, "_blank");
@@ -130,8 +125,8 @@
                     productList.appendChild(productItem);
                 });
     
-                if (filteredRows.length === 0) {
-                    productList.innerHTML = "<p>No Necklaces available.</p>";
+                if (rows.length === 0) {
+                    productList.innerHTML = "<p>No products available.</p>";
                 }
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -140,6 +135,11 @@
     
         fetchData();
     </script>
+    
+    
+ 
+    
+    
     
 </body>
 </html>
