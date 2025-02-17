@@ -7,13 +7,14 @@ async function fetchData() {
     try {
         const response = await fetch(url);
         const data = await response.json();
-        const rows = data.values.slice(1).reverse(); // Reverse to show latest first
+        let rows = data.values.slice(1); // ✅ Serial number from low to high
         console.log("Fetched Data:", rows);
 
         const productList = document.getElementById("product-list");
         productList.innerHTML = ""; // Clear previous content
 
-        rows.forEach(row => {
+        rows.forEach((row, index) => {
+            const serialNumber = index + 1; // ✅ Serial number starts from 1
             const name = row[1]; // Jewelry Name
             const price = parseFloat(row[2]); // Original Price
             const discountedPrice = (price * 0.5).toFixed(2); // 50% Discounted Price
@@ -58,7 +59,7 @@ async function fetchData() {
             productDetails.classList.add("product-details");
 
             const title = document.createElement("h3");
-            title.textContent = name;
+            title.textContent = `${serialNumber}. ${name}`; // ✅ Serial number before name
 
             const priceSection = document.createElement("div");
             priceSection.classList.add("price-section");
@@ -80,7 +81,7 @@ async function fetchData() {
             shareBtn.onclick = (event) => {
                 event.stopPropagation();
                 const currentPageLink = window.location.href; // Get current page URL
-               const message = `🔥 -50% OFF | 6 months warranty \n Check this out: ${name} \nOriginal Price: ₹${price} \nDiscounted Price:        ₹${discountedPrice} \n${imageUrls[0]} \n \nView more: ${currentPageLink}`;
+                const message = `🔥 -50% OFF | 6 months warranty \nSerial No: ${serialNumber} \nCheck this out: ${name} \n\nDiscounted Price: ₹${discountedPrice} \n${imageUrls[0]} \n \nView more: ${currentPageLink}`;
                 const whatsappUrl = `http://wa.me/+917795383476?text=${encodeURIComponent(message)}`;
                 window.open(whatsappUrl, "_blank");
             };
