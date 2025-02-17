@@ -119,6 +119,13 @@
         #call-button:hover {
             background-color: #0056b3;
         }
+
+        #serial-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -140,6 +147,8 @@
 
         <p id="product-description"></p>
 
+     
+
         <button id="share-button">Share on WhatsApp</button>
         <a id="call-button" href="tel:+917795383476">Call Now</a>
     </div>
@@ -148,6 +157,7 @@
         function getQueryParams() {
             const params = new URLSearchParams(window.location.search);
             return {
+              
                 name: params.get("name"),
                 price: params.get("price"),
                 description: cleanDescription(params.get("description") || "No description available."),
@@ -181,17 +191,21 @@
             document.getElementById("discounted-price").textContent = price;
             document.getElementById("product-description").textContent = description;
 
+            
+
             if (images.length > 0) {
                 document.getElementById("product-image").src = images[currentIndex];
                 createDots();
                 enableSwipe();
             }
 
-            document.getElementById("share-button").onclick = () => {
-                const message = `🔥 Hot Deal -50% OFF | 6 months warranty for polishing. 🔥\n${name} \nOriginal Price: ₹${(price * 2).toFixed(2)} \nDiscounted Price: ₹${price} \n${images[0]}`;
-                const whatsappUrl = `http://wa.me/+917795383476?text=${encodeURIComponent(message)}`;
-                window.open(whatsappUrl, "_blank");
-            };
+            // Add serial number and current page URL in the share button
+document.getElementById("share-button").onclick = () => {
+    const message = `🔥 Hot Deal -50% OFF | 6 months warranty for polishing. 🔥\n${name} \nDiscounted Price: ₹${price} \nMore Details: ${window.location.href}`;
+    const whatsappUrl = `http://wa.me/+917795383476?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, "_blank");
+};
+
         };
 
         function createDots() {
