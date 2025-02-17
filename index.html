@@ -39,11 +39,35 @@
             border-radius: 5px;
             margin-top: 10px;
         }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .blinking {
+            animation: blink 1s infinite;
+            color: white;
+            font-weight: bold;
+        }
         .categories {
             display: flex;
-            justify-content: space-around;
+            justify-content: center;
+            gap: 15px;
             padding: 20px;
-            overflow-x: auto;
+        }
+        .categories button {
+            background: linear-gradient(45deg, #ff9800, #ff5722);
+            color: white;
+            font-size: 16px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.3s ease-in-out;
+        }
+        .categories button:hover {
+            transform: scale(1.1);
         }
         .categories div {
             text-align: center;
@@ -148,8 +172,8 @@
             background-color: #f0f095;
         }
         .categories-panel img {
-            width: 50px;
-            height: 50px;
+            width: 80px;
+            height: 80px;
         }
         .arrow-icon {
             color: red;
@@ -169,8 +193,12 @@
         6 months warranty
     </center>
     <div class="categories">
-        <div onclick="redirectToPage('all.html')">New Arrivals</div>
-        <div onclick="redirectToPage('wed.html')">Wedding Collection</div>
+        <button onclick="redirectToPage('all.html')">
+            <span class="blinking">New Arrivals</span>
+        </button>
+        <button onclick="redirectToPage('wed.html')">
+            <span class="blinking">Wedding Collection</span>
+        </button>
     </div>
     
     
@@ -208,14 +236,25 @@
             <img src="images/neck.png" alt="Necklace Icon"> Necklace <i class="fas fa-chevron-right"></i>
         </div>
         <div onclick="redirectToPage('ear.html')">
-            <img src="images/ear.png" alt="Earrings Icon"> Earrings <i class="fas fa-chevron-right"></i>
+            <img src="images/ear.png" alt="Earrings Icon"> Earings <i class="fas fa-chevron-right"></i>
+        </div>
+       
+        <div onclick="redirectToPage('wed.html')">
+            <img src="images/wed.png" alt="Wedding Icon"> Wedding Collections <i class="fas fa-chevron-right"></i>
+        </div>
+        <div onclick="redirectToPage('wed.html')">
+            <img src="images/mar.png" alt="Wedding Icon"> Marriage Collection - Full Set<i class="fas fa-chevron-right"></i>
+        </div>
+        <div onclick="redirectToPage('wed.html')">
+            <img src="images/hair.png" alt="Wedding Icon"> Jada Bridal Hair <i class="fas fa-chevron-right"></i>
+        </div>
+        <div onclick="redirectToPage('wed.html')">
+            <img src="images/bangels.png" alt="Wedding Icon"> Bangles <i class="fas fa-chevron-right"></i>
         </div>
         <div onclick="redirectToPage('ring.html')">
             <img src="images/ring.png" alt="Rings Icon"> Rings <i class="fas fa-chevron-right"></i>
         </div>
-        <div onclick="redirectToPage('wed.html')">
-            <img src="images/wed.png" alt="Wedding Icon"> Wedding Collections <i class="fas fa-chevron-right"></i>
-        </div>
+        
     </div>
 
 
@@ -236,7 +275,7 @@
             document.getElementById('categories-panel').style.display = 'none';
         });
 
-        const images = ["images/1.jpg", "images/2.jpg", "images/3.jpg"];
+        const images = ["images/1.jpg", "images/2.jpg", "images/3.jpg", "images/4.jpg"];
         let index = 0;
 
         function changeImage() {
