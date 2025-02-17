@@ -83,7 +83,7 @@ async function fetchData() {
                 event.stopPropagation();
                 const currentPageLink = window.location.href; // Get current page URL
                 const message = `🔥 -50% OFF | 6 months warranty \nSerial No: ${serialNumber} \nCheck this out: ${name} \n\nDiscounted Price: ₹${discountedPrice} \n${imageUrls[0]} \n \nView more: ${currentPageLink}`;
-                const whatsappUrl = `http://wa.me/+917795383476?text=${encodeURIComponent(message)}`;
+                const whatsappUrl = `http://wa.me/+918073562972?text=${encodeURIComponent(message)}`;
                 window.open(whatsappUrl, "_blank");
             };
 
