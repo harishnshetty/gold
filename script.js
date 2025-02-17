@@ -8,13 +8,14 @@ async function fetchData() {
         const response = await fetch(url);
         const data = await response.json();
         let rows = data.values.slice(1); // ✅ Serial number from low to high
+        rows.reverse(); // Reverse the rows to display serial numbers in reverse order
         console.log("Fetched Data:", rows);
 
         const productList = document.getElementById("product-list");
         productList.innerHTML = ""; // Clear previous content
 
         rows.forEach((row, index) => {
-            const serialNumber = index + 1; // ✅ Serial number starts from 1
+            const serialNumber = rows.length - index; // Reverse serial number
             const name = row[1]; // Jewelry Name
             const price = parseFloat(row[2]); // Original Price
             const discountedPrice = (price * 0.5).toFixed(2); // 50% Discounted Price
@@ -23,7 +24,7 @@ async function fetchData() {
             let shortDescription = fullDescription.length > 50 ? fullDescription.substring(0, 50) + "..." : fullDescription;
 
             const imageUrls = row[3].split(", ").map(link =>
-                link.replace("https://drive.google.com/open?id=", "https://lh3.googleusercontent.com/d/")
+                link.replace("https://drive.google.com/open?id=", "https://lh3.googleusercontent.com/d/") 
             );
 
             function redirectToProductPage() {
@@ -101,5 +102,4 @@ async function fetchData() {
         console.error("Error fetching data:", error);
     }
 }
-
 fetchData();

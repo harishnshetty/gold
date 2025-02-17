@@ -201,7 +201,7 @@
 
             // Add serial number and current page URL in the share button
 document.getElementById("share-button").onclick = () => {
-    const message = `🔥 Hot Deal -50% OFF | 6 months warranty for polishing. 🔥\n${name} \nDiscounted Price: ₹${price} \nMore Details: ${window.location.href}`;
+    const message = `🔥 Hot Deal -50% OFF | 6 months warranty\n${name} \nDiscounted Price: ₹${price} \nMore Details: ${window.location.href}`;
     const whatsappUrl = `http://wa.me/+917795383476?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, "_blank");
 };
