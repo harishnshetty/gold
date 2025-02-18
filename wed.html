@@ -14,6 +14,16 @@
         <a href="index.html" class="home-button">Home</a>
     </header>
 
+    <!-- Sorting Dropdown -->
+     <div style="text-align: center; margin: 10px;">
+        <label for="sortOrder">Sort By: </label>
+        <select id="sortOrder" onchange="fetchData()">
+            <option value="default">Default</option>
+            <option value="low-to-high">Price: Low to High</option>
+            <option value="high-to-low">Price: High to Low</option>
+        </select>
+    </div>
+    
     <main>
         <div class="grid-container" id="product-list"></div>
     </main>
@@ -35,6 +45,13 @@
                 // ✅ Filter to show only "Necklace"
                 rows = rows.filter(row => row[1]?.toLowerCase() === "wedding");
     
+                 const sortOrder = document.getElementById("sortOrder").value;
+
+                if (sortOrder === "low-to-high") {
+                    rows.sort((a, b) => parseFloat(a[2]) - parseFloat(b[2])); // Sort by price (ascending)
+                } else if (sortOrder === "high-to-low") {
+                    rows.sort((a, b) => parseFloat(b[2]) - parseFloat(a[2])); // Sort by price (descending)
+                }
                 const productList = document.getElementById("product-list");
                 productList.innerHTML = ""; // Clear previous content   
     
