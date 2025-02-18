@@ -15,6 +15,16 @@
     </header>
     
     
+    <!-- Sorting Dropdown -->
+     <div style="text-align: center; margin: 10px;">
+        <label for="sortOrder">Sort By: </label>
+        <select id="sortOrder" onchange="fetchData()">
+            <option value="default">Default</option>
+            <option value="low-to-high">Price: Low to High</option>
+            <option value="high-to-low">Price: High to Low</option>
+        </select>
+    </div>
+    
     <main>
         <div class="grid-container" id="product-list"></div>
     </main>
