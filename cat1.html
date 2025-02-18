@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Homepage</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #fff;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .menu-icon {
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .blinking-arrow {
+            font-size: 30px; /* Increase size if needed */
+            font-weight: bold;
+            animation: blink 1s infinite;
+            margin-left: 8px; /* Adjust spacing between hamburger and arrow */
+            color: #a71e32;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #a71e32;
+        }
+        
+        
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        
+        
+        .categories {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+        }
+        .categories button {
+            background: linear-gradient(45deg, #ff9800, #ff5722);
+            color: white;
+            font-size: 16px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.3s ease-in-out;
+        }
+        .categories button:hover {
+            transform: scale(1.1);
+        }
+        .categories div {
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .categories-panel {
+            display: grid;
+            grid-template-columns: 1fr; /* Default: 1x1 Grid */
+            gap: 15px;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+        }
+        
+        /* Desktop: 2x2 Grid */
+        @media (min-width: 768px) {
+            .categories-panel {
+                grid-template-columns: repeat(2, 1fr); /* 2 Columns */
+                grid-template-rows: auto; /* Dynamic row sizing */
+            }
+        }
+        
+        /* Category Item Styling */
+        .categories-panel div {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            background: linear-gradient(45deg, #57b051, #649cd1);
+            border: 1px solid #92cb4d;
+            color: white;
+        }
+        
+        .categories-panel div:hover {
+            background-color: #f0f095;
+        }
+        
+        /* Category Images */
+        .categories-panel img {
+            width: 80px;
+            height: 80px;
+            margin-right: 10px;
+        }
+        
+
+    </style>
+</head>
+<body>
+
+    <div class="categories">
+              <button onclick="redirectToPage('index.html')">
+            <span class="blinking">Home</span>
+        </button>
+    </div> 
+
+     <script>
+        function redirectToPage(page) {
+            window.location.href = page;
+        }
+    </script>
+    
+
+    <h2>Categories</h2>
+    <div class="categories-panel" id="categories-panel">
+              
+        <div onclick="redirectToPage('necklace.html')">
+            <img src="images/neck.png" alt="Necklace Icon"> Necklace / ನೆಕ್ ಲೇಸ್ <i class="fas fa-chevron-right"></i>
+        </div>
+        <div onclick="redirectToPage('ear.html')">
+            <img src="images/ear.png" alt="Earrings Icon"> Earings / ಇಯರಿಂಗ್ಸ್<i class="fas fa-chevron-right"></i>
+        </div>
+       
+        <div onclick="redirectToPage('wed.html')">
+            <img src="images/wed.png" alt="Wedding Icon"> Wedding Collections / ವೆಡ್ಡಿಂಗ್ ಕಲೆಕ್ಷನ್ಸ್ <i class="fas fa-chevron-right"></i>
+        </div>
+        <div onclick="redirectToPage('mar.html')">
+            <img src="images/mar.png" alt="Marriage Icon"> Marriage Collection / ಮ್ಯಾರೇಜ್ ಕಲೆಕ್ಷನ್ಸ್ - Full Set<i class="fas fa-chevron-right"></i>
+        </div>
+        <div onclick="redirectToPage('hair.html')">
+            <img src="images/hair.png" alt="hair Icon"> Jada Bridal Hair / ಚೌಲಿ <i class="fas fa-chevron-right"></i>
+        </div>
+        <div onclick="redirectToPage('bangels.html')">
+            <img src="images/bangels.png" alt="bangles Icon"> Bangles / ಬ್ಯಾಂಗಲ್ಸ್  <i class="fas fa-chevron-right"></i>
+        </div>
+        <div onclick="redirectToPage('chain.html')">
+            <img src="images/chain.png" alt="Chains Icon"> Chains / ಸರ <i class="fas fa-chevron-right"></i>
+        </div>
+        <div onclick="redirectToPage('ring.html')">
+            <img src="images/ring.png" alt="Rings Icon"> Rings / ಉಂಗುರಗಳು <i class="fas fa-chevron-right"></i>
+        </div>
+        
+    </div>
+</body>
+</html>

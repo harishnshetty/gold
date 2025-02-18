@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +9,7 @@
 </head>
 <body>
     <header>
-        <h1>Necklace</h1>
+        <h1>Ring's</h1>
         <img src="images/gif1.gif" alt="Loading GIF" class="header-gif">
         <a href="cat1.html" class="home-button">All-list</a>
         <a href="index.html" class="home-button">Home</a>
@@ -33,10 +34,10 @@
                 console.log("Fetched Data:", rows);
     
                 // ✅ Filter to show only "Necklace"
-                rows = rows.filter(row => row[1]?.toLowerCase() === "necklace");
+                rows = rows.filter(row => row[1]?.toLowerCase() === "ring");
     
                 const productList = document.getElementById("product-list");
-                productList.innerHTML = ""; // Clear previous content
+                productList.innerHTML = ""; // Clear previous content   
     
                 const totalProducts = rows.length; // ✅ Get total number of products
     
